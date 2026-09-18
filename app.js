@@ -48,7 +48,7 @@ function render(options={}){
   $$('.card').forEach(el=>{
     let old=before.get(el.dataset.id);
     if(groupIds.has(el.dataset.id)){el.style.visibility='hidden';newCards.push(el);return}
-    if(!old)return;
+    if(!old||options.noAnimation)return;
     let now=el.getBoundingClientRect(),dx=old.left-now.left,dy=old.top-now.top;
     if(Math.abs(dx)+Math.abs(dy)>1)el.animate([{transform:`translate3d(${dx}px,${dy}px,0)`},{transform:'translate3d(0,0,0)'}],{duration:230,easing:'cubic-bezier(.18,.8,.22,1)'});
   });
@@ -114,6 +114,6 @@ function resultSheet(){openSheet('You won!',`<div style="text-align:center"><div
 function celebrate(){sound('win');let c=$('#celebration'),x=c.getContext('2d'),d=devicePixelRatio;c.width=innerWidth*d;c.height=innerHeight*d;x.scale(d,d);let p=Array.from({length:90},()=>({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.4,v:2+Math.random()*5,r:Math.random()*6+3,c:['#f2cf69','#e44b55','#5bc9dc','#fff','#5b8cff'][Math.random()*5|0],a:Math.random()*6})),n=0;(function f(){x.clearRect(0,0,innerWidth,innerHeight);p.forEach(q=>{q.y+=q.v;q.a+=.08;x.save();x.translate(q.x,q.y);x.rotate(q.a);x.fillStyle=q.c;x.fillRect(-q.r,-q.r/2,q.r*2,q.r);x.restore()});if(n++<180)requestAnimationFrame(f);else x.clearRect(0,0,innerWidth,innerHeight)})()}
 
 $$('.game-choice').forEach(b=>b.onclick=()=>setup(b.dataset.game));$('#variantOptions').onclick=e=>{if(e.target.dataset.v){setupVariant=e.target.dataset.v;$$('#variantOptions button').forEach(b=>b.classList.toggle('selected',b===e.target))}};$('#difficultyOptions').onclick=e=>{let b=e.target.closest('[data-d]');if(b){setupDifficulty=b.dataset.d;$$('#difficultyOptions button').forEach(x=>x.classList.toggle('selected',x===b));if(setupGame==='spider'){setupVariant={easy:'1suit',standard:'2suit',hard:'4suit'}[setupDifficulty];$$('#variantOptions button').forEach(x=>x.classList.toggle('selected',x.dataset.v===setupVariant))}}};$('#dealBtn').onclick=()=>{if(!settings.name){let n=prompt('What is your first name? (Used for Top Scores)');if(n)settings.name=n.trim().slice(0,20)}newState()};$$('[data-back]').forEach(b=>b.onclick=welcome);$('#resumeBtn').onclick=play;$('#settingsBtn').onclick=settingsPanel;$('#scoresBtn').onclick=scoresPanel;$('#howBtn').onclick=howPanel;$('#gameMenuBtn').onclick=menu;$('#soundBtn').onclick=()=>{settings.sound=!settings.sound;save();$('#soundBtn').textContent=settings.sound?'♪':'♩'};$('#undoBtn').onclick=undoMove;$('#hintBtn').onclick=hint;$('#autoBtn').onclick=autoFinish;$('#newBtn').onclick=()=>setup(state.type);$('#closeSheet').onclick=closeSheet;$('#sheet').onclick=e=>{if(e.target.id==='sheet')closeSheet()};
-window.addEventListener('resize',()=>{if(state&&$('#game').classList.contains('active'))render()});
+window.addEventListener('resize',()=>{if(state&&$('#game').classList.contains('active'))render({noAnimation:true})});
 document.body.dataset.theme=settings.theme;if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});welcome();
 })();
