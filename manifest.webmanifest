@@ -4,7 +4,7 @@
   "description": "Klondike, FreeCell, and Spider solitaire made for your phone.",
   "start_url": "./",
   "display": "standalone",
-  "orientation": "portrait",
+  "orientation": "any",
   "background_color": "#063b25",
   "theme_color": "#07552f",
   "icons": [{"src":"icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}]

@@ -36,16 +36,31 @@
 .eyebrow{font-size:11px}
 .deal-info{font-size:14px;line-height:1.45;opacity:.78;margin:0 0 18px}
 .card{backface-visibility:hidden}
+body{--card-h:calc(var(--card-w)*1.42)}
 body[data-game="freecell"]{--card-w:min(12vw,48px)}
 body[data-game="spider"]{--card-w:min(9.5vw,39px)}
 @media(min-width:600px){body[data-game="freecell"],body[data-game="spider"]{--card-w:48px}}
+.corner{font-size:max(14px,calc(var(--card-w)*.36));line-height:.96}
+.corner .suit{font-size:max(13px,calc(var(--card-w)*.34))}
+.card.red{color:#b31627}
 .card{transition:box-shadow .14s ease}
 .drag-stack{position:fixed;top:0;left:0;z-index:1000;pointer-events:none;will-change:transform}
 .card.drag-ghost{pointer-events:none!important;transition:none!important;will-change:auto}
+.card-zoom{position:fixed;inset:0;z-index:650;display:grid;place-items:center;background:#001b12aa;pointer-events:none}
+.zoom-card{position:relative;width:min(180px,45vw);aspect-ratio:5/7;border:2px solid #ded8cd;border-radius:12px;background:#fff;color:#101513;box-shadow:0 18px 55px #00110bd9}
+.zoom-card.red{color:#b31627}
+.zoom-corner{position:absolute;top:10px;left:11px;display:flex;flex-direction:column;align-items:center;font-size:38px;font-weight:950;line-height:.95}
+.zoom-corner span{font-size:32px}
+.zoom-center{position:absolute;inset:0;display:grid;place-items:center;font:112px Georgia}
 @media (orientation:landscape) and (max-height:600px){
   #rotate{display:none!important}
-  :root{--card-w:42px}
-  .game-head{height:58px;padding-top:0}
-  .game-tools{height:58px;padding-top:2px}
-  .board{padding-top:6px}
+  #app{max-width:none;margin:0;box-shadow:none}
+  .screen{max-width:none;left:0;transform:none}
+  :root{--card-w:72px}
+  body[data-game="klondike"]{--card-w:min(10vw,72px)}
+  body[data-game="freecell"]{--card-w:min(6.2vw,52px)}
+  body[data-game="spider"]{--card-w:min(9vw,76px)}
+  .game-head{height:54px;padding:0 8px}
+  .game-tools{height:52px;padding:2px 8px env(safe-area-inset-bottom)}
+  .board{padding:6px 5px;overflow:auto;overscroll-behavior:contain}
 }
