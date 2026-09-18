@@ -36,7 +36,8 @@
 .eyebrow{font-size:11px}
 .deal-info{font-size:14px;line-height:1.45;opacity:.78;margin:0 0 18px}
 .card{transition:box-shadow .14s ease}
-.card.drag-ghost{pointer-events:none!important;transition:none!important;will-change:transform}
+.drag-stack{position:fixed;top:0;left:0;z-index:1000;pointer-events:none;will-change:transform}
+.card.drag-ghost{pointer-events:none!important;transition:none!important;will-change:auto}
 @media (orientation:landscape) and (max-height:600px){
   #rotate{display:none!important}
   :root{--card-w:42px}
