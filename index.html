@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="theme-color" content="#07552f">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <title>Adam's Solitaire</title>
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="icon" href="icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body data-theme="green">
+  <div id="rotate" aria-live="polite"><span>↻</span><b>Turn your phone upright</b><small>Adam's Solitaire is designed for portrait play.</small></div>
+  <main id="app">
+    <section id="welcome" class="screen active">
+      <header class="hero">
+        <button id="settingsBtn" class="icon-btn" aria-label="Settings">⚙</button>
+        <div class="logo-mark"><span>♠</span><span>♥</span></div>
+        <p class="eyebrow">A timeless classic</p>
+        <h1>Adam’s<br><em>Solitaire</em></h1>
+        <p id="greeting">Welcome</p>
+      </header>
+      <div id="resumeCard" class="resume-card hidden">
+        <div><small>GAME IN PROGRESS</small><strong id="resumeTitle">Klondike</strong><span id="resumeMeta">00:00</span></div>
+        <button id="resumeBtn" class="primary">Resume</button>
+      </div>
+      <div class="game-picker">
+        <button class="game-choice" data-game="klondike"><span class="choice-art fan">♠<i>♥</i></span><span><b>Klondike</b><small>The enduring favorite</small></span><span class="chev">›</span></button>
+        <button class="game-choice" data-game="freecell"><span class="choice-art cells">♣</span><span><b>FreeCell</b><small>Strategy meets patience</small></span><span class="chev">›</span></button>
+        <button class="game-choice" data-game="spider"><span class="choice-art spider">♠</span><span><b>Spider</b><small>Build complete runs</small></span><span class="chev">›</span></button>
+      </div>
+      <footer class="welcome-footer"><button id="scoresBtn">🏆 Top Scores</button><button id="howBtn">ⓘ How to Play</button></footer>
+    </section>
+
+    <section id="setup" class="screen modal-screen">
+      <header class="subhead"><button class="back-btn" data-back>‹</button><div><small>NEW GAME</small><h2 id="setupTitle">Klondike</h2></div></header>
+      <div class="setup-body">
+        <div id="variantGroup" class="setting-group"><h3>Draw</h3><div id="variantOptions" class="segmented"></div></div>
+        <div class="setting-group"><h3>Difficulty</h3><div id="difficultyOptions" class="difficulty-list"></div></div>
+        <button id="dealBtn" class="deal-btn">Deal the Cards <span>→</span></button>
+      </div>
+    </section>
+
+    <section id="game" class="screen game-screen">
+      <header class="game-head">
+        <button id="gameMenuBtn" class="icon-btn">☰</button>
+        <div class="stat"><small>SCORE</small><strong id="score">0</strong></div>
+        <div class="game-name"><b id="gameTitle">Klondike</b><small id="gameMode">DRAW 1 · STANDARD</small></div>
+        <div class="stat"><small>TIME</small><strong id="timer">0:00</strong></div>
+        <button id="soundBtn" class="icon-btn">♪</button>
+      </header>
+      <div id="board" class="board" aria-label="Solitaire game board"></div>
+      <nav class="game-tools">
+        <button id="undoBtn"><span>↶</span>Undo</button>
+        <button id="hintBtn"><span>♢</span>Hint</button>
+        <button id="autoBtn"><span>⚡</span>Finish</button>
+        <button id="newBtn"><span>＋</span>New</button>
+      </nav>
+    </section>
+
+    <section id="panel" class="screen modal-screen"><header class="subhead"><button class="back-btn" data-back>‹</button><div><small id="panelKicker">ADAM'S SOLITAIRE</small><h2 id="panelTitle">Settings</h2></div></header><div id="panelBody" class="panel-body"></div></section>
+  </main>
+  <div id="sheet" class="overlay hidden" role="dialog" aria-modal="true"><div class="sheet"><div class="grab"></div><h2 id="sheetTitle">Menu</h2><div id="sheetBody"></div><button id="closeSheet" class="sheet-close">Close</button></div></div>
+  <div id="toast" role="status"></div>
+  <canvas id="celebration"></canvas>
+  <script src="app.js"></script>
+</body>
+</html>
