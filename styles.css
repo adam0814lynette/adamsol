@@ -35,6 +35,8 @@
 .game-choice small{font-size:13px}
 .eyebrow{font-size:11px}
 .deal-info{font-size:14px;line-height:1.45;opacity:.78;margin:0 0 18px}
+.card{transition:box-shadow .14s ease}
+.card.drag-ghost{pointer-events:none!important;transition:none!important;will-change:transform}
 @media (orientation:landscape) and (max-height:600px){
   #rotate{display:none!important}
   :root{--card-w:42px}
