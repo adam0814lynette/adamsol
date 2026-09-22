@@ -28,6 +28,7 @@ The game has been refined through mobile play and visual review. Work to date in
 - Position tracking supports Spider's board, which has no foundation piles.
 - Spider clears completed runs with a visible animation toward the completed counter. The final win celebration and result sheet wait until that animation finishes.
 - Klondike and FreeCell Finish keep moving eligible cards to foundations in one click. Finish does not draw stock cards or rearrange the tableau, and explains when it cannot continue.
+- Win recording and win presentation are handled separately. Finish rechecks the completed position, and a completed saved round resumes its confetti and result screen after a reload.
 - Hint marks both the source card and its destination. Spider only suggests a stock deal when every tableau column is occupied; FreeCell Hint and Finish handle games with no waste pile.
 - Settings include Reduced, Standard, and Relaxed animation speeds. Preferences default to Standard for existing players.
 - The most recent 30 undo snapshots are saved with an active round, so Undo works after a reload.
