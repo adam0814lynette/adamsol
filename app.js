@@ -92,7 +92,7 @@ function checkRun(i){let p=state.tableau[i];if(p.length<13)return;let a=p.slice(
 function checkWin(){let won=state.type==='spider'?state.completed===8:state.foundations.every(p=>p.length===13);if(!won)return;state.won=true;clearInterval(timerId);let key=modeKey(),list=settings.scores[key]||[];list.push({name:settings.name||'Player',score:state.score,time:state.time,date:Date.now()});list.sort((a,b)=>b.score-a.score||a.time-b.time);settings.scores[key]=list.slice(0,5);save();celebrate();setTimeout(()=>resultSheet(),900)}
 
 function winningPosition(){return state.type==='spider'?state.completed===8:state.foundations.every(p=>p.length===13)}
-function boardPositionKey(){let cards=a=>a.map(c=>c?`${c.id}:${c.up?'u':'d'}`:'_');return JSON.stringify({type:state.type,variant:state.variant,tableau:state.tableau.map(cards),stock:cards(state.stock||[]),waste:cards(state.waste||[]),foundations:state.foundations.map(cards),cells:(state.cells||[]).map(c=>c?`${c.id}:${c.up?'u':'d'}`:'_'),completed:state.completed||0})}
+function boardPositionKey(){let cards=a=>a.map(c=>c?`${c.id}:${c.up?'u':'d'}`:'_');return JSON.stringify({type:state.type,variant:state.variant,tableau:state.tableau.map(cards),stock:cards(state.stock||[]),waste:cards(state.waste||[]),foundations:(state.foundations||[]).map(cards),cells:(state.cells||[]).map(c=>c?`${c.id}:${c.up?'u':'d'}`:'_'),completed:state.completed||0})}
 function hasAnyLegalAction(){
   if(state.type==='klondike'&&(state.stock.length||state.waste.length))return true;
   if(state.type==='spider'&&state.stock.length&&state.tableau.every(p=>p.length))return true;
@@ -112,19 +112,25 @@ function hasAnyLegalAction(){
   return false;
 }
 function evaluatePosition(){
-  if(!state||state.won)return;
+  if(!state||state.won||winningPosition())return;
   if(!Array.isArray(state.positionHistory))state.positionHistory=[];
   let key=boardPositionKey(),history=state.positionHistory,last=history.at(-1);
+  let visits=0;
   if(key!==last){
-    let repeated=history.includes(key);
+    visits=history.filter(position=>position===key).length+1;
     history.push(key);if(history.length>200)history.shift();save();
-    if(repeated&&!winningPosition())toast('You returned to a previous position. Try a different move or undo.');
   }
   if(!winningPosition()&&!hasAnyLegalAction()&&!state.stuck){
     state.stuck=true;save();showNoMoves();
+  }else if(visits===3){
+    showLoopPrompt();
+  }else if(visits===2){
+    toast('You returned to a previous position. Try a different move or undo.');
   }
 }
-function showNoMoves(){clearInterval(timerId);openSheet('No moves available',`<p>There are no legal moves or available stock actions in this position.</p><div class="sheet-list"><button id="stuckUndo" ${undo.length?'':'disabled'}>Undo last move</button><button id="stuckNew">Start a new game</button></div>`);$('#stuckUndo').onclick=()=>{closeSheet();undoMove()};$('#stuckNew').onclick=()=>{clearInterval(timerId);closeSheet();setup(state.type)}}
+function endGame(){clearInterval(timerId);closeSheet();state=null;undo=[];selected=null;save();welcome()}
+function showNoMoves(){clearInterval(timerId);openSheet('No moves available',`<p>There are no legal moves or available stock actions in this position.</p><div class="sheet-list"><button id="stuckUndo" ${undo.length?'':'disabled'}>Undo last move</button><button id="stuckEnd">End game</button></div>`,false);$('#stuckUndo').onclick=()=>{closeSheet();undoMove()};$('#stuckEnd').onclick=endGame}
+function showLoopPrompt(){openSheet('Repeated position',`<p>You have returned to this board several times. Another path may still be available.</p><div class="sheet-list"><button id="loopContinue">Keep playing</button><button id="loopUndo" ${undo.length?'':'disabled'}>Undo last move</button><button id="loopEnd">End game</button></div>`,false);$('#loopContinue').onclick=closeSheet;$('#loopUndo').onclick=()=>{closeSheet();undoMove()};$('#loopEnd').onclick=endGame}
 
 function undoMove(){if(!undo.length)return;state=undo.pop();selected=null;sound();render();save();if($('#game').classList.contains('active')&&!state.won)beginClock()}
 function hint(){let m=findMove();if(!m){toast('No obvious moves — try the stock or undo');return}let el=$(`.card[data-id="${m.id}"]`);if(el)el.classList.add('hinted');toast(m.text)}
@@ -143,12 +149,12 @@ function howPanel(){openPanel('How to Play',`<h3>Klondike</h3><p>Build tableau c
 function scoresPanel(){let rows=Object.entries(settings.scores).flatMap(([mode,a])=>a.map(x=>({...x,mode}))).sort((a,b)=>b.score-a.score).slice(0,30);openPanel('Top Scores',rows.length?`<table class="score-table"><thead><tr><th>PLAYER</th><th>GAME</th><th>SCORE</th><th>TIME</th></tr></thead><tbody>${rows.map(x=>`<tr><td>${esc(x.name)}</td><td>${esc(x.mode.replaceAll('-',' · '))}</td><td>${x.score}</td><td>${fmt(x.time)}</td></tr>`).join('')}</tbody></table>`:`<div class="empty-state">🏆<h3>No scores yet</h3><p>Complete a game to claim the first spot.</p></div>`)}
 function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function menu(){openSheet('Game Menu',`<div class="sheet-list"><button id="sheetResume">Continue playing</button><button id="sheetHow">How to Play</button><button id="sheetSettings">Settings</button><button id="sheetWelcome">Save &amp; Exit to Welcome</button></div>`);$('#sheetResume').onclick=closeSheet;$('#sheetHow').onclick=()=>{closeSheet();howPanel()};$('#sheetSettings').onclick=()=>{closeSheet();settingsPanel()};$('#sheetWelcome').onclick=()=>{closeSheet();welcome()}}
-function openSheet(t,h){$('#sheetTitle').textContent=t;$('#sheetBody').innerHTML=h;$('#sheet').classList.remove('hidden')}
-function closeSheet(){$('#sheet').classList.add('hidden')}
+function openSheet(t,h,dismissible=true){$('#sheetTitle').textContent=t;$('#sheetBody').innerHTML=h;$('#closeSheet').classList.toggle('hidden',!dismissible);$('#sheet').dataset.dismissible=String(dismissible);$('#sheet').classList.remove('hidden')}
+function closeSheet(){$('#sheet').classList.add('hidden');$('#sheet').dataset.dismissible='true'}
 function resultSheet(){openSheet('You won!',`<div style="text-align:center"><div style="font-size:54px">🏆</div><h3>${settings.name||'Player'}, brilliant game!</h3><p><b>${state.score}</b> points · <b>${fmt(state.time)}</b></p><div class="sheet-list"><button id="again">Play again</button><button id="winScores">View Top Scores</button><button id="winHome">Welcome screen</button></div></div>`);$('#again').onclick=()=>{closeSheet();setup(state.type)};$('#winScores').onclick=()=>{closeSheet();scoresPanel()};$('#winHome').onclick=()=>{closeSheet();state=null;save();welcome()}}
 function celebrate(){sound('win');let c=$('#celebration'),x=c.getContext('2d'),d=devicePixelRatio;c.width=innerWidth*d;c.height=innerHeight*d;x.scale(d,d);let p=Array.from({length:90},()=>({x:Math.random()*innerWidth,y:-20-Math.random()*innerHeight*.4,v:2+Math.random()*5,r:Math.random()*6+3,c:['#f2cf69','#e44b55','#5bc9dc','#fff','#5b8cff'][Math.random()*5|0],a:Math.random()*6})),n=0;(function f(){x.clearRect(0,0,innerWidth,innerHeight);p.forEach(q=>{q.y+=q.v;q.a+=.08;x.save();x.translate(q.x,q.y);x.rotate(q.a);x.fillStyle=q.c;x.fillRect(-q.r,-q.r/2,q.r*2,q.r);x.restore()});if(n++<180)requestAnimationFrame(f);else x.clearRect(0,0,innerWidth,innerHeight)})()}
 
-$$('.game-choice').forEach(b=>b.onclick=()=>setup(b.dataset.game));$('#variantOptions').onclick=e=>{if(e.target.dataset.v){setupVariant=e.target.dataset.v;$$('#variantOptions button').forEach(b=>b.classList.toggle('selected',b===e.target))}};$('#difficultyOptions').onclick=e=>{let b=e.target.closest('[data-d]');if(b){setupDifficulty=b.dataset.d;$$('#difficultyOptions button').forEach(x=>x.classList.toggle('selected',x===b));if(setupGame==='spider'){setupVariant={easy:'1suit',standard:'2suit',hard:'4suit'}[setupDifficulty];$$('#variantOptions button').forEach(x=>x.classList.toggle('selected',x.dataset.v===setupVariant))}}};$('#dealBtn').onclick=()=>{if(!settings.name){let n=prompt('What is your first name? (Used for Top Scores)');if(n)settings.name=n.trim().slice(0,20)}newState()};$$('[data-back]').forEach(b=>b.onclick=welcome);$('#resumeBtn').onclick=play;$('#settingsBtn').onclick=settingsPanel;$('#scoresBtn').onclick=scoresPanel;$('#howBtn').onclick=howPanel;$('#gameMenuBtn').onclick=menu;$('#soundBtn').onclick=()=>{settings.sound=!settings.sound;save();$('#soundBtn').textContent=settings.sound?'♪':'♩'};$('#undoBtn').onclick=undoMove;$('#hintBtn').onclick=hint;$('#autoBtn').onclick=autoFinish;$('#newBtn').onclick=()=>setup(state.type);$('#closeSheet').onclick=closeSheet;$('#sheet').onclick=e=>{if(e.target.id==='sheet')closeSheet()};
+$$('.game-choice').forEach(b=>b.onclick=()=>setup(b.dataset.game));$('#variantOptions').onclick=e=>{if(e.target.dataset.v){setupVariant=e.target.dataset.v;$$('#variantOptions button').forEach(b=>b.classList.toggle('selected',b===e.target))}};$('#difficultyOptions').onclick=e=>{let b=e.target.closest('[data-d]');if(b){setupDifficulty=b.dataset.d;$$('#difficultyOptions button').forEach(x=>x.classList.toggle('selected',x===b));if(setupGame==='spider'){setupVariant={easy:'1suit',standard:'2suit',hard:'4suit'}[setupDifficulty];$$('#variantOptions button').forEach(x=>x.classList.toggle('selected',x.dataset.v===setupVariant))}}};$('#dealBtn').onclick=()=>{if(!settings.name){let n=prompt('What is your first name? (Used for Top Scores)');if(n)settings.name=n.trim().slice(0,20)}newState()};$$('[data-back]').forEach(b=>b.onclick=welcome);$('#resumeBtn').onclick=play;$('#settingsBtn').onclick=settingsPanel;$('#scoresBtn').onclick=scoresPanel;$('#howBtn').onclick=howPanel;$('#gameMenuBtn').onclick=menu;$('#soundBtn').onclick=()=>{settings.sound=!settings.sound;save();$('#soundBtn').textContent=settings.sound?'♪':'♩'};$('#undoBtn').onclick=undoMove;$('#hintBtn').onclick=hint;$('#autoBtn').onclick=autoFinish;$('#newBtn').onclick=()=>setup(state.type);$('#closeSheet').onclick=closeSheet;$('#sheet').onclick=e=>{if(e.target.id==='sheet'&&e.currentTarget.dataset.dismissible!=='false')closeSheet()};
 window.addEventListener('resize',()=>{if(state&&$('#game').classList.contains('active'))render({noAnimation:true})});
 document.body.dataset.theme=settings.theme;if('serviceWorker'in navigator)navigator.serviceWorker.register('./sw.js').catch(()=>{});welcome();
 })();
