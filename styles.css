@@ -46,6 +46,8 @@ body[data-game="spider"]{--card-w:min(9.5vw,39px)}
 .card{transition:box-shadow .14s ease}
 .drag-stack{position:fixed;top:0;left:0;z-index:1000;pointer-events:none;will-change:transform}
 .card.drag-ghost{pointer-events:none!important;transition:none!important;will-change:auto}
+.completed-run{position:fixed;inset:0;z-index:450;pointer-events:none}.completed-run .card{transition:none!important;box-shadow:0 8px 20px #001c1299}
+.card.hint-target,.pile.hint-target{outline:3px solid #7ce6ff;outline-offset:2px;box-shadow:0 0 16px #7ce6ffaa;z-index:110!important}.animation-setting{display:block!important}.speed-options{display:flex;gap:6px;margin-top:10px}.speed-options button{flex:1;min-width:0;padding:9px 4px;border-radius:8px;background:#ffffff1b;border:1px solid #ffffff35;font-size:12px}.speed-options button.selected{background:#e5ca87;color:#17231f;font-weight:800}#toast{max-width:min(90vw,420px);white-space:normal;text-align:center}
 .card-zoom{position:fixed;inset:0;z-index:650;display:grid;place-items:center;background:#001b12aa;pointer-events:none}
 .zoom-card{position:relative;width:min(180px,45vw);aspect-ratio:5/7;border:2px solid #ded8cd;border-radius:12px;background:#fff;color:#101513;box-shadow:0 18px 55px #00110bd9}
 .zoom-card.red{color:#b31627}

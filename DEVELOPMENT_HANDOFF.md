@@ -26,6 +26,11 @@ The game has been refined through mobile play and visual review. Work to date in
 - Added a no-legal-actions check. A position with no legal card moves or usable stock action opens a dialog with Undo (when possible) and End game. Klondike stock/redeal actions and Spider's rule that stock cannot be dealt while a column is empty are included in the check.
 - Added repeated-position tracking. Returning to a board position a second time produces a brief warning. On the third visit to the same position, a dialog offers Keep playing, Undo, or End game. This is a loop warning, not a claim that the deal is unsolvable.
 - Position tracking supports Spider's board, which has no foundation piles.
+- Spider clears completed runs with a visible animation toward the completed counter. The final win celebration and result sheet wait until that animation finishes.
+- Klondike and FreeCell Finish keep moving eligible cards to foundations in one click. Finish does not draw stock cards or rearrange the tableau, and explains when it cannot continue.
+- Hint marks both the source card and its destination. Spider only suggests a stock deal when every tableau column is occupied; FreeCell Hint and Finish handle games with no waste pile.
+- Settings include Reduced, Standard, and Relaxed animation speeds. Preferences default to Standard for existing players.
+- The most recent 30 undo snapshots are saved with an active round, so Undo works after a reload.
 - End game discards the active round, returns to the welcome screen, and does not record a top score. Both dialogs require the player to choose an action rather than dismissing them by tapping outside.
 - Full deal solvability search and guaranteed-solvable deal generation were deliberately left out. Those remain separate, substantially more complex features.
 
@@ -66,7 +71,7 @@ Playwright/Chromium was available in the original development environment, but i
 ## Current implementation notes
 
 - Existing preferences are merged with defaults in `app.js`, so newly added settings should have a safe default for existing players.
-- Active game state is saved after renders and timer updates. Undo stores snapshots of game state in memory; it is not a persistent undo history across reloads.
+- Active game state and up to 30 undo snapshots are saved after renders and timer updates. Undo history survives reloads for an active round.
 - Repeat-position history is stored with the active game and capped at 200 recent position transitions. The position key includes game type, visible/hidden card identities, pile order, stock/waste order, cells, foundations, and Spider completed runs. It excludes score and time so they do not disguise a loop. The dialog appears on the third recorded visit to the same position within that history.
 - `hasAnyLegalAction()` relies on the game's existing `canSelect()` and `legal()` rules. If move rules change, update or test this detector alongside them.
 - The browser's system auto-rotate setting still controls whether Android rotates the display; the app allows orientation changes and adapts its layout when the viewport changes.
