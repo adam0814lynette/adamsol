@@ -27,8 +27,12 @@ The game has been refined through mobile play and visual review. Work to date in
 - Added repeated-position tracking. Returning to a board position a second time produces a brief warning. On the third visit to the same position, a dialog offers Keep playing, Undo, or End game. This is a loop warning, not a claim that the deal is unsolvable.
 - Position tracking supports Spider's board, which has no foundation piles.
 - Spider clears completed runs with a visible animation toward the completed counter. The final win celebration and result sheet wait until that animation finishes.
-- Klondike and FreeCell Finish keep moving eligible cards to foundations in one click. Finish does not draw stock cards or rearrange the tableau, and explains when it cannot continue.
+- Klondike and FreeCell Finish keep moving eligible cards to foundations in one click. Klondike Finish scans and redeals the stock, detects a repeated stock cycle, and stops when the tableau must be rearranged.
 - Win recording and win presentation are handled separately. Finish rechecks the completed position, and a completed saved round resumes its confetti and result screen after a reload.
+- Saved data uses a versioned schema (`schemaVersion: 2`). Legacy data is migrated, malformed JSON is recovered, and structurally invalid active rounds are discarded rather than loaded.
+- New rounds store their expected deck size. Card moves and stock actions pass through a shared action wrapper that validates card identity, pile structure, foundation order, and total card count; failed actions roll back safely.
+- Settings displays app version 1.6.0 and a device-local diagnostic log. The log retains the 30 most recent migration, storage, invariant, Finish, update, and unexpected runtime errors and can be copied or cleared.
+- A service-worker update banner offers Update now or Later when a new cached release takes control.
 - Hint marks both the source card and its destination. Spider only suggests a stock deal when every tableau column is occupied; FreeCell Hint and Finish handle games with no waste pile.
 - Settings include Reduced, Standard, and Relaxed animation speeds. Preferences default to Standard for existing players.
 - The most recent 30 undo snapshots are saved with an active round, so Undo works after a reload.
@@ -65,6 +69,7 @@ Playwright/Chromium was available in the original development environment, but i
 - Publish the contents of `AdamSol` as the site root (or preserve the current GitHub Pages subdirectory layout). App asset URLs and the service worker registration are relative, which supports hosting below a repository path.
 - After publishing, verify the live Pages deployment succeeded. On Android, visit the live site in Chrome and refresh, then close and reopen the installed app if it still shows old files.
 - When changing cached assets, increment the `CACHE` value in `sw.js`. The install handler precaches the files in `ASSETS`; activation removes caches with older names. Keep that list in sync with the app shell.
+- Keep `APP_VERSION` in `app.js`, the cache version in `sw.js`, and any release notes in this handoff synchronized for each release.
 - The service worker uses cache-first responses for cached assets. A changed service worker/cache version is how a static release refreshes the installed app's shell.
 - User preferences and the active game are stored in browser `localStorage` under `adams-solitaire-v1`. They are scoped to the site's origin; moving to a different domain does not automatically move them. Clearing site data can erase settings, scores, and an in-progress game.
 - GitHub Pages must serve the app over HTTPS for installation and service-worker behavior. The GitHub repository page itself is not the game URL.

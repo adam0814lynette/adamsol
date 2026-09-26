@@ -23,6 +23,7 @@
 .empty-label{font-size:10px;opacity:.55}
 .panel-body h3{font-size:22px}
 .panel-body p,.panel-body li{font-size:16px;line-height:1.55}
+.app-info{margin-top:22px}.diagnostic-list{padding-left:20px}.diagnostic-list li{margin-bottom:14px}.diagnostic-list small{display:block;opacity:.65;overflow-wrap:anywhere}.diagnostic-actions{display:flex;gap:10px}.diagnostic-actions button{flex:1}.update-banner{position:fixed;z-index:900;left:50%;top:calc(env(safe-area-inset-top) + 10px);transform:translateX(-50%);width:min(94%,480px);display:flex;align-items:center;gap:8px;padding:10px 12px;border:1px solid #ffffff38;border-radius:13px;background:#10231deF;color:#fff;box-shadow:0 8px 25px #00140daa;font-size:13px}.update-banner span{flex:1}.update-banner button{padding:8px 10px;border-radius:8px;background:#e6cb8b;color:#17231f;font-weight:800}.update-banner button:last-child{background:#ffffff1c;color:#fff}
 .panel-body .option{font-size:16px}
 .theme-dot{width:42px;height:42px}
 .score-table th,.score-table td{font-size:13px}
