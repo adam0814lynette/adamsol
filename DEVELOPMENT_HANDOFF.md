@@ -27,11 +27,11 @@ The game has been refined through mobile play and visual review. Work to date in
 - Added repeated-position tracking. Returning to a board position a second time produces a brief warning. On the third visit to the same position, a dialog offers Keep playing, Undo, or End game. This is a loop warning, not a claim that the deal is unsolvable.
 - Position tracking supports Spider's board, which has no foundation piles.
 - Spider clears completed runs with a visible animation toward the completed counter. The final win celebration and result sheet wait until that animation finishes.
-- Klondike and FreeCell Finish keep moving eligible cards to foundations in one click. Klondike Finish scans and redeals the stock, detects a repeated stock cycle, and stops when the tableau must be rearranged.
+- Klondike and FreeCell Finish move eligible tableau cards to foundations in one click. Finish deliberately leaves the Klondike stock and waste and the FreeCell cells for the player.
 - Win recording and win presentation are handled separately. Finish rechecks the completed position, and a completed saved round resumes its confetti and result screen after a reload.
 - Saved data uses a versioned schema (`schemaVersion: 2`). Legacy data is migrated, malformed JSON is recovered, and structurally invalid active rounds are discarded rather than loaded.
 - New rounds store their expected deck size. Card moves and stock actions pass through a shared action wrapper that validates card identity, pile structure, foundation order, and total card count; failed actions roll back safely.
-- Settings displays app version 1.6.0 and a device-local diagnostic log. The log retains the 30 most recent migration, storage, invariant, Finish, update, and unexpected runtime errors and can be copied or cleared.
+- The upper-right corner and Settings display app version 1.6.1. Settings also includes a device-local diagnostic log. The log retains the 30 most recent migration, storage, invariant, Finish, update, and unexpected runtime errors and can be copied or cleared.
 - A service-worker update banner offers Update now or Later when a new cached release takes control.
 - Hint marks both the source card and its destination. Spider only suggests a stock deal when every tableau column is occupied; FreeCell Hint and Finish handle games with no waste pile.
 - Settings include Reduced, Standard, and Relaxed animation speeds. Preferences default to Standard for existing players.
