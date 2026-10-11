@@ -28,13 +28,13 @@ The game has been refined through mobile play and visual review. Work to date in
 - Position tracking supports Spider's board, which has no foundation piles.
 - Spider clears completed runs with a visible animation toward the completed counter. The final win celebration and result sheet wait until that animation finishes.
 - Klondike and FreeCell Finish move eligible tableau cards to foundations in one click. Finish deliberately leaves the Klondike stock and waste and the FreeCell cells for the player.
-- Klondike defaults to one of 1,152 numbered solvable deals. These deals are constructed with a known tableau and stock completion path for both Draw 1 and Draw 3. Players can enter a deal number, replay it from the game menu, share it, or switch to fully random deals in setup or Settings.
+- Klondike defaults to one of 200 numbered solver-verified Draw 1 seeds or 50 Draw 3 seeds. They are ordinary shuffles retained only after the offline solver completed them. Players can enter a deal number, replay it from the game menu, share it, or switch to unverified random deals in setup or Settings. The generator and solver live in `tools/verify_klondike.py`; metadata is retained in `verified-draw1.json` and `verified-draw3.json`, while `verified-deals.js` is the compact runtime seed list.
 - Klondike Hint scores all legal candidates and favors revealing hidden tableau cards, safe foundation progress, useful empty columns, and productive waste moves.
 - Tapping an occupied foundation now accepts a previously selected card before treating the foundation card as a new selection.
 - Win recording and win presentation are handled separately. Finish rechecks the completed position, and a completed saved round resumes its confetti and result screen after a reload.
 - Saved data uses a versioned schema (`schemaVersion: 2`). Legacy data is migrated, malformed JSON is recovered, and structurally invalid active rounds are discarded rather than loaded.
 - New rounds store their expected deck size. Card moves and stock actions pass through a shared action wrapper that validates card identity, pile structure, foundation order, and total card count; failed actions roll back safely.
-- The upper-right corner and Settings display app version 1.7.0. Settings also includes a device-local diagnostic log. The log retains the 30 most recent migration, storage, invariant, Finish, update, and unexpected runtime errors and can be copied or cleared.
+- The upper-right corner and Settings display app version 1.8.1. Settings also includes a device-local diagnostic log. The log retains the 30 most recent migration, storage, invariant, Finish, update, and unexpected runtime errors and can be copied or cleared.
 - A service-worker update banner offers Update now or Later when a new cached release takes control.
 - Hint marks both the source card and its destination. Spider only suggests a stock deal when every tableau column is occupied; FreeCell Hint and Finish handle games with no waste pile.
 - Settings include Reduced, Standard, and Relaxed animation speeds. Preferences default to Standard for existing players.
