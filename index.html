@@ -38,6 +38,8 @@
       <header class="subhead"><button class="back-btn" data-back>‹</button><div><small>NEW GAME</small><h2 id="setupTitle">Klondike</h2></div></header>
       <div class="setup-body">
         <div id="variantGroup" class="setting-group"><h3>Draw</h3><div id="variantOptions" class="segmented"></div></div>
+        <div id="dealTypeGroup" class="setting-group"><h3>Deals</h3><div id="dealTypeOptions" class="segmented"><button data-deal-type="solvable">Solvable</button><button data-deal-type="random">Random</button></div></div>
+        <div id="dealNumberGroup" class="setting-group deal-number-group"><label for="dealNumber"><b>Verified deal number</b><small>1–1152 · blank for a surprise</small></label><input id="dealNumber" type="number" inputmode="numeric" min="1" max="1152" placeholder="Random verified deal"></div>
         <div class="setting-group"><h3>Difficulty</h3><div id="difficultyOptions" class="difficulty-list"></div></div>
         <p id="dealInfo" class="deal-info">Each game uses a random shuffle; solvability is not guaranteed.</p>
         <button id="dealBtn" class="deal-btn">Deal the Cards <span>→</span></button>
