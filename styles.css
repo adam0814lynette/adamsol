@@ -67,3 +67,8 @@ body[data-game="spider"]{--card-w:min(9.5vw,39px)}
   .game-tools{height:52px;padding:2px 8px env(safe-area-inset-bottom)}
   .board{padding:6px 5px;overflow:auto;overscroll-behavior:contain}
 }
+
+/* Keep long columns reachable without shrinking exposed ranks below a readable size. */
+.board{overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scroll-padding:16px}
+button:focus-visible,.card:focus-visible,.pile:focus-visible{outline:3px solid #7ce6ff;outline-offset:2px;z-index:120!important}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}

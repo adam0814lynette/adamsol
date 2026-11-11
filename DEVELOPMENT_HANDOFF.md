@@ -34,7 +34,7 @@ The game has been refined through mobile play and visual review. Work to date in
 - Win recording and win presentation are handled separately. Finish rechecks the completed position, and a completed saved round resumes its confetti and result screen after a reload.
 - Saved data uses a versioned schema (`schemaVersion: 2`). Legacy data is migrated, malformed JSON is recovered, and structurally invalid active rounds are discarded rather than loaded.
 - New rounds store their expected deck size. Card moves and stock actions pass through a shared action wrapper that validates card identity, pile structure, foundation order, and total card count; failed actions roll back safely.
-- The upper-right corner and Settings display app version 1.8.1. Settings also includes a device-local diagnostic log. The log retains the 30 most recent migration, storage, invariant, Finish, update, and unexpected runtime errors and can be copied or cleared.
+- The upper-right corner and Settings display app version 1.9.0. Settings also includes a device-local diagnostic log. The log retains the 30 most recent migration, storage, invariant, Finish, update, and unexpected runtime errors and can be copied or cleared.
 - A service-worker update banner offers Update now or Later when a new cached release takes control.
 - Hint marks both the source card and its destination. Spider only suggests a stock deal when every tableau column is occupied; FreeCell Hint and Finish handle games with no waste pile.
 - Settings include Reduced, Standard, and Relaxed animation speeds. Preferences default to Standard for existing players.
@@ -84,3 +84,14 @@ Playwright/Chromium was available in the original development environment, but i
 - Repeat-position history is stored with the active game and capped at 200 recent position transitions. The position key includes game type, visible/hidden card identities, pile order, stock/waste order, cells, foundations, and Spider completed runs. It excludes score and time so they do not disguise a loop. The dialog appears on the third recorded visit to the same position within that history.
 - `hasAnyLegalAction()` relies on the game's existing `canSelect()` and `legal()` rules. If move rules change, update or test this detector alongside them.
 - The browser's system auto-rotate setting still controls whether Android rotates the display; the app allows orientation changes and adapts its layout when the viewport changes.
+
+
+## Version 1.9.0 polish
+
+- Tableau spacing adapts to available board height, with readable minimum spacing and vertical scrolling for longer columns in portrait and landscape.
+- Finish is hidden in Spider and disabled when there is no eligible tableau-to-foundation move. Its existing tableau-only scope remains unchanged.
+- FreeCell hints consider legal sequences and favor freeing occupied cells and useful columns. Spider hints favor revealing hidden cards and joining suited runs.
+- Settings and How to Play return to the screen they were opened from. Canceling a new-game setup returns to the current game. The timer pauses outside gameplay, while a dialog is open, and when the document is hidden.
+- Cards and piles have descriptive accessible labels and keyboard controls: Tab, arrows, Enter/Space, and Escape. Dialogs move focus inside, contain Tab focus, make the board inert, and restore focus when dismissed. Browser zoom is enabled; the system reduced-motion preference suppresses motion and confetti.
+- Release version: 1.9.0; service-worker cache: v20; saved-data schema remains 2.
+- Browser regressions include navigation, paused timers, keyboard moves, modal focus, ranked hints, scrolling long columns, and reduced-motion wins.

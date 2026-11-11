@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#07552f">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -35,7 +35,7 @@
     </section>
 
     <section id="setup" class="screen modal-screen">
-      <header class="subhead"><button class="back-btn" data-back>‹</button><div><small>NEW GAME</small><h2 id="setupTitle">Klondike</h2></div></header>
+      <header class="subhead"><button class="back-btn" aria-label="Back" data-back>‹</button><div><small>NEW GAME</small><h2 id="setupTitle">Klondike</h2></div></header>
       <div class="setup-body">
         <div id="variantGroup" class="setting-group"><h3>Draw</h3><div id="variantOptions" class="segmented"></div></div>
         <div id="dealTypeGroup" class="setting-group"><h3>Deals</h3><div id="dealTypeOptions" class="segmented"><button data-deal-type="solvable">Solvable</button><button data-deal-type="random">Random</button></div></div>
@@ -48,7 +48,7 @@
 
     <section id="game" class="screen game-screen">
       <header class="game-head">
-        <button id="gameMenuBtn" class="icon-btn">☰</button>
+        <button id="gameMenuBtn" class="icon-btn" aria-label="Game menu">☰</button>
         <div class="stat"><small>SCORE</small><strong id="score">0</strong></div>
         <div class="game-name"><b id="gameTitle">Klondike</b><small id="gameMode">DRAW 1 · STANDARD</small></div>
         <div class="stat"><small>TIME</small><strong id="timer">0:00</strong></div>
@@ -63,9 +63,9 @@
       </nav>
     </section>
 
-    <section id="panel" class="screen modal-screen"><header class="subhead"><button class="back-btn" data-back>‹</button><div><small id="panelKicker">ADAM'S SOLITAIRE</small><h2 id="panelTitle">Settings</h2></div></header><div id="panelBody" class="panel-body"></div></section>
+    <section id="panel" class="screen modal-screen"><header class="subhead"><button class="back-btn" aria-label="Back" data-back>‹</button><div><small id="panelKicker">ADAM'S SOLITAIRE</small><h2 id="panelTitle">Settings</h2></div></header><div id="panelBody" class="panel-body"></div></section>
   </main>
-  <div id="sheet" class="overlay hidden" role="dialog" aria-modal="true"><div class="sheet"><div class="grab"></div><h2 id="sheetTitle">Menu</h2><div id="sheetBody"></div><button id="closeSheet" class="sheet-close">Close</button></div></div>
+  <div id="sheet" class="overlay hidden" role="dialog" aria-modal="true" aria-labelledby="sheetTitle"><div class="sheet"><div class="grab"></div><h2 id="sheetTitle">Menu</h2><div id="sheetBody"></div><button id="closeSheet" class="sheet-close">Close</button></div></div>
   <div id="toast" role="status"></div>
   <div id="cardZoom" class="card-zoom hidden" aria-hidden="true"></div>
   <canvas id="celebration"></canvas>
